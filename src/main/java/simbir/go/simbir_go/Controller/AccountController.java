@@ -1,5 +1,6 @@
 package simbir.go.simbir_go.Controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -24,6 +25,7 @@ public class AccountController {
 
     //описание: получение данных о текущем аккаунте
     //ограничения: только авторизованные пользователи
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/Me")
     public ResponseEntity<Account> getCurrentUser() {
         return ResponseEntity.ok(authService.me());
@@ -45,6 +47,7 @@ public class AccountController {
 
     //описание: выход из аккаунта
     // ограничения: только авторизованные пользователи
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/SignOut")
     public ResponseEntity<ApiResponse> signOut(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
@@ -59,6 +62,7 @@ public class AccountController {
     //описание: обновление своего аккаунта
     //ограничения: только авторизованные пользователи, нельзя использовать уже
     //используемые в системе username
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/Update")
     public ResponseEntity<ApiResponse> update(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(authService.update(request));

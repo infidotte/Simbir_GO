@@ -1,5 +1,6 @@
 package simbir.go.simbir_go.Controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,7 @@ public class RentController {
 
     //описание: Получение информации об аренде по id
     //ограничения: Только арендатор и владелец транспорта
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{rentId}")
     public ResponseEntity<Rent> getRentById(@PathVariable String rentId) throws MethodNotAllowedException, RentNotFoundException {
         return ResponseEntity.ok(rentService.getRentById(Long.parseLong(rentId)));
@@ -40,6 +42,7 @@ public class RentController {
 
     //описание: Получение истории аренд текущего аккаунта
     //ограничения: Только авторизованные пользователи
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/MyHistory")
     public ResponseEntity<List<Rent>> getCurrentUserRentHistory() {
         return ResponseEntity.ok(rentService.getCurrentUserRentHistory());
@@ -47,6 +50,7 @@ public class RentController {
 
     //описание: Получение истории аренд транспорта
     //ограничения: Только владелец этого транспорта
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/TransportHistory/{transportId}")
     public ResponseEntity<List<Rent>> getTransportRentHistory(@PathVariable String transportId) throws TransportNotFoundException, MethodNotAllowedException {
         return ResponseEntity.ok(rentService.getTransportRentHistory(Long.parseLong(transportId)));
@@ -55,6 +59,7 @@ public class RentController {
     //описание: Аренда транспорта в личное пользование
     //ограничения: Только авторизованные пользователи, нельзя брать в аренду
     //собственный транспорт
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/New/{transportId}")
     public ResponseEntity<Rent> startRent(@PathVariable String transportId,
                                           @RequestParam String rentType
@@ -64,6 +69,7 @@ public class RentController {
 
     //описание: Завершение аренды транспорта по id аренды
     //ограничения: Только человек который создавал эту аренду
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/End/{rentId}")
     public ResponseEntity<Rent> endRent(@PathVariable String rentId,
                                         @RequestParam Double latitude,

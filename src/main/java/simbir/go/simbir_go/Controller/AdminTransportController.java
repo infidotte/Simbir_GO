@@ -1,5 +1,6 @@
 package simbir.go.simbir_go.Controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class AdminTransportController {
 
     //описание: Получение списка всех транспортных средств
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping
     public ResponseEntity<List<Transport>> getAllTransport(@RequestParam Long start,
                                                            @RequestParam Integer count, @RequestParam String transportType
@@ -34,6 +36,7 @@ public class AdminTransportController {
 
     //описание: Получение информации о транспортном средстве по id
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{id}")
     public ResponseEntity<Transport> getTransportById(@PathVariable String id) throws TransportNotFoundException {
         return ResponseEntity.ok(transportService.getTransportById(Long.parseLong(id)));
@@ -41,6 +44,7 @@ public class AdminTransportController {
 
     //описание: Создание нового транспортного средства
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping
     public ResponseEntity<Transport> createTransport(@Valid @RequestBody AdminTransportRequest request
     ) throws UserNotFoundException {
@@ -49,6 +53,7 @@ public class AdminTransportController {
 
     //описание: Изменение транспортного средства по id
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/{id}")
     public ResponseEntity<Transport> updateTransport(@PathVariable String id, @Valid
     @RequestBody TransportRequest request
@@ -58,6 +63,7 @@ public class AdminTransportController {
 
     //описание: Удаление транспорта по id
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteTransport(@PathVariable String id) throws TransportNotFoundException, MethodNotAllowedException {
         return ResponseEntity.ok(transportService.deleteTransport(Long.parseLong(id)));

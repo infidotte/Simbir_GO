@@ -1,5 +1,6 @@
 package simbir.go.simbir_go.Controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class AdminAccountController {
 
     //описание: Получение списка всех аккаунтов
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping
     public ResponseEntity<List<Account>> getAllAccounts(@RequestParam Long start,
                                                         @RequestParam Integer count) {
@@ -30,6 +32,7 @@ public class AdminAccountController {
 
     //описание: Получение информации об аккаунте по id
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{id}")
     public ResponseEntity<Account> getAccountById(@PathVariable String id) throws UserNotFoundException {
         return ResponseEntity.ok(accountService.findById(Long.parseLong(id)));
@@ -37,6 +40,7 @@ public class AdminAccountController {
 
     //описание: Создание администратором нового аккаунта
     //ограничения: Только администраторы, нельзя создать аккаунт с уже существующим в системе username
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping
     public ResponseEntity<Account> createAccount(@RequestBody AdminAuthRequest request) throws UserAlreadyExistsException {
         return ResponseEntity.ok(authService.adminCreate(request));
@@ -44,6 +48,7 @@ public class AdminAccountController {
 
     //описание: Изменение администратором аккаунта по id
     //ограничения: Только администраторы, нельзя изменять username на уже существующий в системе
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateAccount(@PathVariable String id,
                                                      @RequestBody AdminAuthRequest request) throws UserAlreadyExistsException {
@@ -52,6 +57,7 @@ public class AdminAccountController {
 
     //описание: Удаление аккаунта по id
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteAccount(@PathVariable String id) {
         return ResponseEntity.ok(accountService.delete(Long.parseLong(id)));

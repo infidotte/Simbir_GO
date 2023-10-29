@@ -1,5 +1,6 @@
 package simbir.go.simbir_go.Controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class AdminRentController {
     private final RentService rentService;
     //описание: Получение информации по аренде по id
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/Rent/{rentId}")
     public ResponseEntity<Rent> getRentById(@PathVariable String rentId) throws RentNotFoundException {
         return ResponseEntity.ok(rentService.adminGetRentById(Long.parseLong(rentId)));
@@ -28,6 +30,7 @@ public class AdminRentController {
 
     //описание: Получение истории аренд пользователя с id={userId}
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/UserHistory/{userId}")
     public ResponseEntity<List<Rent>> getUserHistoryById(@PathVariable String userId) {
         return ResponseEntity.ok(rentService.getUserRentHistory(Long.parseLong(userId)));
@@ -35,6 +38,7 @@ public class AdminRentController {
 
     //описание: Получение истории аренд транспорта с id={transportId}
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/TransportHistory/{transportId}")
     public ResponseEntity<List<Rent>> getTransportHistoryById(@PathVariable String transportId) {
         return ResponseEntity.ok(rentService.adminGetTransportRentHistory(transportId));
@@ -42,6 +46,7 @@ public class AdminRentController {
 
     //описание: Создание новой аренды
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/Rent")
     public ResponseEntity<Rent> createRent(@RequestBody RentRequest request
     ) throws UserNotFoundException, TransportNotFoundException, MethodNotAllowedException {
@@ -51,6 +56,7 @@ public class AdminRentController {
 
     //описание: Завершение аренды транспорта по id аренды
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/Rent/{rentId}")
     public ResponseEntity<Rent> endRent(@PathVariable String rentId,
                                         @RequestParam Double latitude,
@@ -61,6 +67,7 @@ public class AdminRentController {
 
     //описание: Изменение записи об аренде по id
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/Rent/{rentId}")
     public ResponseEntity<Rent> updateRentById(@PathVariable String rentId,
                                                @RequestBody RentRequest request
@@ -70,6 +77,7 @@ public class AdminRentController {
 
     //описание: Удаление информации об аренде по id
     //ограничения: Только администраторы
+    @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/Rent/{rentId}")
     public ResponseEntity<ApiResponse> deleteRentById(@PathVariable String rentId) {
         return ResponseEntity.ok(rentService.delete(Long.parseLong(rentId)));

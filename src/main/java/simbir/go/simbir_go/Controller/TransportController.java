@@ -1,5 +1,6 @@
 package simbir.go.simbir_go.Controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class TransportController {
 
     //описание: Добавление нового транспорта
     //ограничения: Только авторизованные пользователи
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping
     public ResponseEntity<Transport> createTransport(@Valid @RequestBody TransportRequest request) {
         return ResponseEntity.ok(transportService.createTransport(request, authService.me()));
@@ -35,6 +37,7 @@ public class TransportController {
 
     //описание: Изменение транспорта оп id
     //ограничения: Только владелец этого транспорта
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/{id}")
     public ResponseEntity<Transport> updateTransport(@PathVariable String id, @Valid
     @RequestBody TransportRequest request
@@ -44,6 +47,7 @@ public class TransportController {
 
     //описание: Удаление транспорта по id
     //ограничения: Только владелец этого транспорта
+    @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteTransport(@PathVariable String id) throws TransportNotFoundException, MethodNotAllowedException {
         return ResponseEntity.ok(transportService.deleteTransport(Long.parseLong(id)));

@@ -1,5 +1,6 @@
 package simbir.go.simbir_go.Controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ public class PaymentController {
     //описание: Добавляет на баланс аккаунта с id={accountId} 250 000 денежных единиц.
     //ограничения: Администратор может добавить баланс всем, обычный пользователь
     //только себе
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/api/Payment/Hesoyam/{accountId}")
     public ResponseEntity<ApiResponse> addMoney(@PathVariable String accountId) throws UserNotFoundException, MethodNotAllowedException {
         return ResponseEntity.ok(paymentService.addMoney(Long.parseLong(accountId)));
