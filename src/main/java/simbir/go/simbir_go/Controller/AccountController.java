@@ -10,6 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import simbir.go.simbir_go.Entity.Account;
+import simbir.go.simbir_go.Exception.MethodNotAllowedException;
 import simbir.go.simbir_go.Exception.UserAlreadyExistsException;
 import simbir.go.simbir_go.Exception.UserNotFoundException;
 import simbir.go.simbir_go.Record.ApiResponse;
@@ -41,7 +42,7 @@ public class AccountController {
     //описание: регистрация нового аккаунта
     //ограничения: нельзя создать пользователя с существующим username
     @PostMapping("/SignUp")
-    public ResponseEntity<ApiResponse> signUp(@RequestBody AuthRequest request) throws UserAlreadyExistsException {
+    public ResponseEntity<ApiResponse> signUp(@RequestBody AuthRequest request) throws UserAlreadyExistsException, MethodNotAllowedException {
         return ResponseEntity.ok(authService.signUp(request));
     }
 

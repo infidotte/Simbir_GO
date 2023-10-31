@@ -52,7 +52,7 @@ public class AdminAccountController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateAccount(@PathVariable String id,
                                                      @RequestBody AdminAuthRequest request) throws UserAlreadyExistsException {
-        return ResponseEntity.ok(accountService.adminUpdate(Long.parseLong(id), request));
+        return ResponseEntity.ok(authService.adminUpdate(Long.parseLong(id), request));
     }
 
     //описание: Удаление аккаунта по id

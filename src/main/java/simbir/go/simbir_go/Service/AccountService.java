@@ -24,8 +24,8 @@ public class AccountService {
         return repository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
     }
 
-    public Account findUserDetailsByUsername(String username) {
-        return repository.findByUsername(username).orElseThrow();
+    public Account findUserDetailsByUsername(String username)  {
+        return repository.findByUsername(username).orElse(null);
     }
 
 
@@ -54,15 +54,15 @@ public class AccountService {
     }
 
 
-    public ApiResponse adminUpdate(Long id, AdminAuthRequest request) throws UserAlreadyExistsException {
-        Role role = request.getIsAdmin() ? roleService.findByName("ROLE_ADMIN") : roleService.findByName("ROLE_USER");
-        repository.updateUsernameAndPasswordAndRoleAndBalanceById(request.getUsername(), request.getPassword(), role, request.getBalance(), id);
-        return new ApiResponse("message", "User was updated");
-    }
+
 
     public ApiResponse delete(Long id) {
         repository.deleteById(id);
         return new ApiResponse("message", "User was deleted");
+    }
+
+    public void updateUsernameAndPasswordAndRoleAndBalanceById(String username, String password, Role role, Double balance, Long id) {
+        repository.updateUsernameAndPasswordAndRoleAndBalanceById(username, password, role, balance, id);
     }
 }
 

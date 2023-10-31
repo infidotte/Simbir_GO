@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import simbir.go.simbir_go.Entity.Account;
 import simbir.go.simbir_go.Entity.Role;
+import simbir.go.simbir_go.Exception.MethodNotAllowedException;
 import simbir.go.simbir_go.Exception.UserAlreadyExistsException;
 import simbir.go.simbir_go.Exception.UserNotFoundException;
 import simbir.go.simbir_go.Record.AdminAuthRequest;
@@ -30,8 +31,10 @@ public class AuthService {
         return (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    public ApiResponse signUp(AuthRequest request) throws UserAlreadyExistsException {
+    public ApiResponse signUp(AuthRequest request) throws UserAlreadyExistsException, MethodNotAllowedException {
         Account user = new Account();
+        if (request.getUsername() == null || request.getPassword() == null) throw new MethodNotAllowedException("Incorrect username or password");
+        if (request.getUsername().isEmpty() || request.getPassword().isEmpty()) throw new MethodNotAllowedException("Incorrect username or password");
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(roleService.findByName("ROLE_USER"));
@@ -53,8 +56,13 @@ public class AuthService {
 
     public ApiResponse update(AuthRequest request) {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        accountService.updateUsernameAndPasswordById(request.getUsername(), request.getPassword(), account.getId());
+        accountService.updateUsernameAndPasswordById(request.getUsername(), passwordEncoder.encode(request.getPassword()), account.getId());
         return new ApiResponse("Message", "User was updated");
+    }
+    public ApiResponse adminUpdate(Long id, AdminAuthRequest request) throws UserAlreadyExistsException {
+        Role role = request.getIsAdmin() ? roleService.findByName("ROLE_ADMIN") : roleService.findByName("ROLE_USER");
+        accountService.updateUsernameAndPasswordAndRoleAndBalanceById(request.getUsername(), passwordEncoder.encode(request.getPassword()), role, request.getBalance(), id);
+        return new ApiResponse("message", "User was updated");
     }
 
     public Account adminCreate(AdminAuthRequest request) throws UserAlreadyExistsException {
